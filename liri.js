@@ -45,13 +45,19 @@ var myspotify = new Spotify(keys.Spotify);
 
 // remember to put single quotes around process.argv[3] in your terminal
 
-function spotifyThisSong(Input){
+function spotifyThisSong(input){
     
     // var songName = 'song name here'
-    myspotify.search({ type: 'track', query: Input }, function(err, data) {
+    myspotify.search({ type: 'track', query: input }, function(err, data) {
     // myspotify.search({ type: 'track', query: 'All the Small Things' }, function(err, data) {
         if (err) {
-            myspotify.search({ type: 'tracks', query: 'Ace of Base' }, function(err, data) {
+
+    //i could just hardcode the info in 
+                // console.log()
+                // console.log()
+                // console.log()
+                // console.log()
+            myspotify.search({ type: 'tracks', query: 'The Sign Ace of Base', limit: 1 }, function(err, data) {
                 // q=album:gold%20artist:abba&type=album
             // myspotify.search({ type: 'track', query: 'The Sign' }, function(err, data) {
                 // myspotify.search({ type: 'track', query: 'All the Small Things' }, function(err, data) {
@@ -67,9 +73,7 @@ function spotifyThisSong(Input){
                             console.log("Artists Name: " + artists[i].name);
                         }
                         console.log("   Song Name: The Sign"  );
-                        // console.log("   Song Name: " = Input  );
-                        
-
+                        // console.log("   Song Name: " = input  );
                         var songInfo = data.tracks.items[0];
                         // console.log(songInfo.artists[0].name);
                         console.log("  Album Name: " + songInfo.album.name);
@@ -88,7 +92,7 @@ function spotifyThisSong(Input){
             for (var i=0; i<artists.length; i++){
                 console.log("Artists Name: " + artists[i].name);
             }
-            console.log("   Song Name: " + Input);
+            console.log("   Song Name: " + input);
           
             var songInfo = data.tracks.items[0];
             // console.log(songInfo.artists[0].name);
@@ -100,32 +104,35 @@ function spotifyThisSong(Input){
     });
 }
 //=================================================================================================================
-function movieThis (Input){
+function movieThis (input){
     var request = require("request");
 
-        // run a request to the OMDB API with the movie specified
-        request("http://www.omdbapi.com/?t=" + Input + "&y=&plot=short&apikey=trilogy", function(error, response, body) {        
-        // request("http://www.omdbapi.com/?t=remember+the+titans&y=&plot=short&apikey=trilogy", function(error, response, body) {
+    if (input === undefined){
+        input = 'Mr. Nobody'
+    }
 
-        // If the request is successful (i.e. if the response status code is 200)
-            if (!error && response.statusCode === 200) {
-                    // console.log(JSON.parse(body));    
-                console.log("Title: " + JSON.parse(body).Title);
-                console.log("Year: " + JSON.parse(body).Year);
-                console.log("imdbRating: " + JSON.parse(body).imdbRating);
-                console.log("Rotten Tomatoes Rating: " + JSON.parse(body).Ratings[1].Value);
-                console.log("Country where produced: " + JSON.parse(body).Country);
-                console.log("Language: " + JSON.parse(body).Language);
-                console.log("Plot: " + JSON.parse(body).Plot);                                                               
-                console.log("Actors: " + JSON.parse(body).Actors);
-            }
-        });
+    // run a request to the OMDB API with the movie specified
+    request("http://www.omdbapi.com/?t=" + input + "&y=&plot=short&apikey=trilogy", function(error, response, body) {        
+    // request("http://www.omdbapi.com/?t=remember+the+titans&y=&plot=short&apikey=trilogy", function(error, response, body) {
+
+    // If the request is successful (i.e. if the response status code is 200)
+        if (!error && response.statusCode === 200) {
+                // console.log(JSON.parse(body));    
+            console.log("Title: " + JSON.parse(body).Title);
+            console.log("Year: " + JSON.parse(body).Year);
+            console.log("imdbRating: " + JSON.parse(body).imdbRating);
+            console.log("Rotten Tomatoes Rating: " + JSON.parse(body).Ratings[1].Value);
+            console.log("Country where produced: " + JSON.parse(body).Country);
+            console.log("Language: " + JSON.parse(body).Language);
+            console.log("Plot: " + JSON.parse(body).Plot);                                                               
+            console.log("Actors: " + JSON.parse(body).Actors);
+        }
+    });
 }
 //====================================================================================================================
 function doWhatItSays(){
-            
-        var fs = require("fs");
-        fs.readFile("random.txt", "utf8", function(error, data) {
+    var fs = require("fs");
+    fs.readFile("random.txt", "utf8", function(error, data) {
 
         if (error) {
             return console.log(error);
@@ -142,36 +149,35 @@ function doWhatItSays(){
 
         switch (fileCommand) {
             case "my-tweets":
-              myTweets();
-              break;
+                myTweets();
+                break;
             
             case "spotify-this-song":
             spotifyThisSong(fileparameter);
-              break;
+                break;
             
             case "movie-this":
             movieThis(fileparameter);
-              break;
-            }
-
-        });
+                break;
+        }
+    });
 };
 
 switch (command) {
     case "my-tweets":
-      myTweets();
-      break;
+    myTweets();
+    break;
     
     case "spotify-this-song":
     spotifyThisSong(process.argv[3]);
-      break;
+    break;
     
     case "movie-this":
     movieThis(process.argv[3]);
-      break;
+    break;
     
     case "do-what-it-says":
     doWhatItSays();
-      break;
-    }
+    break;
+}
     
