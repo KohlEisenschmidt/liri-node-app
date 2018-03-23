@@ -27,16 +27,6 @@ function myTweets(){
         console.log(JSON.parse(response));     
         }
     });
-    // var request = require("request");
-    // request( "https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=twitterapi&count=20", function(error, response, body) {
-    // // If the request is successful (i.e. if the response status code is 200)
-    // if (!error && response.statusCode === 200) {
-    //     console.log(JSON.parse(body));
-    // } else {
-    //     console.log(error);
-    //     // console.log(response.statusCode);
-    // }
-    // });
 }
 //============================================================================================================
 
@@ -46,63 +36,28 @@ var myspotify = new Spotify(keys.Spotify);
 // remember to put single quotes around process.argv[3] in your terminal
 
 function spotifyThisSong(input){
-    
-    // var songName = 'song name here'
+    if (input === undefined){
+        input = 'The Sign Ace of Base'
+    }
+
     myspotify.search({ type: 'track', query: input }, function(err, data) {
-    // myspotify.search({ type: 'track', query: 'All the Small Things' }, function(err, data) {
         if (err) {
-
-    //i could just hardcode the info in 
-                // console.log()
-                // console.log()
-                // console.log()
-                // console.log()
-            myspotify.search({ type: 'tracks', query: 'The Sign Ace of Base', limit: 1 }, function(err, data) {
-                // q=album:gold%20artist:abba&type=album
-            // myspotify.search({ type: 'track', query: 'The Sign' }, function(err, data) {
-                // myspotify.search({ type: 'track', query: 'All the Small Things' }, function(err, data) {
-                    //   console.log(data.tracks); 
-                    if (err) {
-
-                      return console.log('Error occurred: ' + err);
-                    }
-                    else{
-                         //  console.log(data);                
-                        var artists = data.tracks.items[0].artists
-                        for (var i=0; i<artists.length; i++){
-                            console.log("Artists Name: " + artists[i].name);
-                        }
-                        console.log("   Song Name: The Sign"  );
-                        // console.log("   Song Name: " = input  );
-                        var songInfo = data.tracks.items[0];
-                        // console.log(songInfo.artists[0].name);
-                        console.log("  Album Name: " + songInfo.album.name);
-                        console.log(" Preview url: " + songInfo.preview_url);
-            
-                //   console.log(JSON.parse(data).artists);
-                    }
-                });
-          return console.log('Error occurred: ' + err);
-
+            return console.log('Error occurred: ' + err);
+        } else if (data===null) {
+            return console.log("Please insert a valad song name")
         }
-        else{
-             //  console.log(data);   
-                        
-            var artists = data.tracks.items[0].artists
-            for (var i=0; i<artists.length; i++){
-                console.log("Artists Name: " + artists[i].name);
-            }
-            console.log("   Song Name: " + input);
-          
-            var songInfo = data.tracks.items[0];
-            // console.log(songInfo.artists[0].name);
-            console.log("  Album Name: " + songInfo.album.name);
-            console.log(" Preview url: " + songInfo.preview_url);
 
-    //   console.log(JSON.parse(data).artists);
+        var artists = data.tracks.items[0].artists
+        for (var i=0; i<artists.length; i++){
+            console.log("Artists Name: " + artists[i].name);
         }
+        console.log("   Song Name: The Sign"  );
+        var songInfo = data.tracks.items[0];
+        console.log("  Album Name: " + songInfo.album.name);
+        console.log(" Preview url: " + songInfo.preview_url);
     });
 }
+
 //=================================================================================================================
 function movieThis (input){
     var request = require("request");
