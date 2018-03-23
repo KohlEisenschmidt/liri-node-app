@@ -42,41 +42,65 @@ function myTweets(){
 
 var Spotify = require('node-spotify-api')
 var myspotify = new Spotify(keys.Spotify);
-var Input = process.argv[3];
+
 // remember to put single quotes around process.argv[3] in your terminal
 
-function spotifyThisSong(){
-
+function spotifyThisSong(Input){
+    
     // var songName = 'song name here'
     myspotify.search({ type: 'track', query: Input }, function(err, data) {
     // myspotify.search({ type: 'track', query: 'All the Small Things' }, function(err, data) {
         if (err) {
+            myspotify.search({ type: 'tracks', query: 'Ace of Base' }, function(err, data) {
+                // q=album:gold%20artist:abba&type=album
+            // myspotify.search({ type: 'track', query: 'The Sign' }, function(err, data) {
+                // myspotify.search({ type: 'track', query: 'All the Small Things' }, function(err, data) {
+                    //   console.log(data.tracks); 
+                    if (err) {
+
+                      return console.log('Error occurred: ' + err);
+                    }
+                    else{
+                         //  console.log(data);                
+                        var artists = data.tracks.items[0].artists
+                        for (var i=0; i<artists.length; i++){
+                            console.log("Artists Name: " + artists[i].name);
+                        }
+                        console.log("   Song Name: The Sign"  );
+                        // console.log("   Song Name: " = Input  );
+                        
+
+                        var songInfo = data.tracks.items[0];
+                        // console.log(songInfo.artists[0].name);
+                        console.log("  Album Name: " + songInfo.album.name);
+                        console.log(" Preview url: " + songInfo.preview_url);
+            
+                //   console.log(JSON.parse(data).artists);
+                    }
+                });
           return console.log('Error occurred: ' + err);
+
         }
         else{
-            // for (var i =0; i<data.length; i++){
-            //     // console.log(tweets);
-            //     // console.log(tweets[0]);
-            //     console.log(data[i]); 
-            // };  
-        }
-    //   console.log(data);
-    //   console.log(data.tracks); 
-    //   console.log(data.tracks.href);       
-            
-    //   console.log(data.tracks.href[1]); 
-    //   console.log(data.tracks.href[1].artists); 
-        // console.log(data.tracks.items[0].artists)
-        var artists = data.tracks.items[0].artists
-        for (var i=0; i<artists.length; i++){
-            console.log(artists[i].name);
-        }
-    //   console.log(JSON.parse(body).artists);
+             //  console.log(data);   
+                        
+            var artists = data.tracks.items[0].artists
+            for (var i=0; i<artists.length; i++){
+                console.log("Artists Name: " + artists[i].name);
+            }
+            console.log("   Song Name: " + Input);
+          
+            var songInfo = data.tracks.items[0];
+            // console.log(songInfo.artists[0].name);
+            console.log("  Album Name: " + songInfo.album.name);
+            console.log(" Preview url: " + songInfo.preview_url);
 
+    //   console.log(JSON.parse(data).artists);
+        }
     });
 }
 //=================================================================================================================
-function movieThis (){
+function movieThis (Input){
     var request = require("request");
 
         // run a request to the OMDB API with the movie specified
@@ -85,8 +109,7 @@ function movieThis (){
 
         // If the request is successful (i.e. if the response status code is 200)
             if (!error && response.statusCode === 200) {
-                    // console.log(JSON.parse(body));
-                
+                    // console.log(JSON.parse(body));    
                 console.log("Title: " + JSON.parse(body).Title);
                 console.log("Year: " + JSON.parse(body).Year);
                 console.log("imdbRating: " + JSON.parse(body).imdbRating);
@@ -97,14 +120,11 @@ function movieThis (){
                 console.log("Actors: " + JSON.parse(body).Actors);
             }
         });
-
 }
 //====================================================================================================================
 function doWhatItSays(){
             
         var fs = require("fs");
-
-        
         fs.readFile("random.txt", "utf8", function(error, data) {
 
         if (error) {
@@ -113,9 +133,27 @@ function doWhatItSays(){
         // We will then print the contents of data
         console.log(data);
         // Then split it by commas (to make it more readable)
-        var dataArr = data.split(", ");
+        var dataArr = data.split(",");
         // We will then re-display the content as an array for later use.
         console.log(dataArr);
+
+        var fileCommand = dataArr[0];
+        var fileparameter = dataArr[1];
+
+        switch (fileCommand) {
+            case "my-tweets":
+              myTweets();
+              break;
+            
+            case "spotify-this-song":
+            spotifyThisSong(fileparameter);
+              break;
+            
+            case "movie-this":
+            movieThis(fileparameter);
+              break;
+            }
+
         });
 };
 
@@ -125,11 +163,11 @@ switch (command) {
       break;
     
     case "spotify-this-song":
-    spotifyThisSong();
+    spotifyThisSong(process.argv[3]);
       break;
     
     case "movie-this":
-    movieThis();
+    movieThis(process.argv[3]);
       break;
     
     case "do-what-it-says":
