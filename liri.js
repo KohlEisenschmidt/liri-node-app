@@ -51,7 +51,7 @@ function spotifyThisSong(input){
         for (var i=0; i<artists.length; i++){
             console.log("Artists Name: " + artists[i].name);
         }
-        console.log("   Song Name: The Sign"  );
+        console.log("   Song Name: " + input );
         var songInfo = data.tracks.items[0];
         console.log("  Album Name: " + songInfo.album.name);
         console.log(" Preview url: " + songInfo.preview_url);
