@@ -44,7 +44,7 @@ function spotifyThisSong(input){
         if (err) {
             return console.log('Error occurred: ' + err);
         } else if (data===null) {
-            return console.log("Please insert a valad song name")
+            return console.log("Please insert a valid song name")
         }
 
         var artists = data.tracks.items[0].artists
